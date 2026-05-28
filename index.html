@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Rasoi — Food & Kitchen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=Outfit:wght@300;400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ===== LOADER ===== -->
+<div id="loader">
+  <img class="ld-logo" src="logo.jpeg" alt="Rasoi Logo" onerror="this.style.background='#4a6741';this.style.border='none'"/>
+  <div class="ld-word">Rasoi</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<!-- ===== BACK TO TOP ===== -->
+<button id="btt" aria-label="Back to top">↑</button>
+
+<!-- ===== SEARCH OVERLAY ===== -->
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search recipes">
+  <div class="search-box">
+    <div class="search-row">
+      <span style="font-size:1.1rem;opacity:.5" aria-hidden="true">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search recipes, ingredients..." autocomplete="off" aria-label="Search input"/>
+      <button class="search-close" onclick="closeSearch()" aria-label="Close search">✕</button>
+    </div>
+    <div class="search-results" id="searchResults" role="list"></div>
+  </div>
+</div>
+
+<!-- ===== DRAWER OVERLAY ===== -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<!-- ===== MOBILE DRAWER ===== -->
+<nav class="mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation">
+  <div class="mobile-section">Navigation</div>
+  <a href="#home" class="mobile-link" onclick="closeDrawer()">🏠 Home</a>
+
+  <div class="mobile-section">Categories</div>
+  <button class="mobile-link" onclick="filterCat('breakfast');closeDrawer();scrollToSection('recipes')">🌅 Breakfast</button>
+  <button class="mobile-link" onclick="filterCat('lunch');closeDrawer();scrollToSection('recipes')">☀️ Lunch</button>
+  <button class="mobile-link" onclick="filterCat('dinner');closeDrawer();scrollToSection('recipes')">🌙 Dinner</button>
+  <button class="mobile-link" onclick="filterCat('snacks');closeDrawer();scrollToSection('recipes')">🎯 Snacks</button>
+  <button class="mobile-link" onclick="filterCat('desserts');closeDrawer();scrollToSection('recipes')">🍮 Desserts</button>
+
+  <div class="mobile-section">Cuisine</div>
+  <button class="mobile-link" onclick="filterCuisine('Indian');closeDrawer()">🇮🇳 Indian</button>
+  <button class="mobile-link" onclick="filterCuisine('Western');closeDrawer()">🌍 Western</button>
+  <button class="mobile-link" onclick="filterCuisine('Italian');closeDrawer()">🇮🇹 Italian</button>
+  <button class="mobile-link" onclick="filterCuisine('Mexican');closeDrawer()">🇲🇽 Mexican</button>
+</nav>
+
+<!-- ===== NAVBAR ===== -->
+<header>
+  <nav class="nav" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+
+      <!-- Logo -->
+      <a href="#home" class="nav-logo" id="navLogo" aria-label="Rasoi Home">
+        <img src="logo.jpeg" alt="Rasoi" onerror="this.style.display='none'"/>
+        <span class="nav-logo-name">Rasoi</span>
+      </a>
+
+      <!-- Desktop links -->
+      <div class="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+
+        <div class="nav-item">
+          <button class="nav-link">
+            Indian
+            <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+          </button>
+          <div class="dropdown">
+            <div class="dd-item" onclick="filterCatAndCuisine('breakfast','Indian');scrollToSection('recipes')"><span class="dd-emoji">🌅</span>Indian Breakfast</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('lunch','Indian');scrollToSection('recipes')"><span class="dd-emoji">☀️</span>Indian Lunch</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('dinner','Indian');scrollToSection('recipes')"><span class="dd-emoji">🌙</span>Indian Dinner</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('snacks','Indian');scrollToSection('recipes')"><span class="dd-emoji">🎯</span>Indian Snacks</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('desserts','Indian');scrollToSection('recipes')"><span class="dd-emoji">🍮</span>Indian Desserts</div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-link">
+            Western
+            <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+          </button>
+          <div class="dropdown">
+            <div class="dd-item" onclick="filterCatAndCuisine('breakfast','Western');scrollToSection('recipes')"><span class="dd-emoji">🥞</span>Western Breakfast</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('lunch','Western');scrollToSection('recipes')"><span class="dd-emoji">🥗</span>Western Lunch</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('dinner','Western');scrollToSection('recipes')"><span class="dd-emoji">🍝</span>Western Dinner</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('snacks','Western');scrollToSection('recipes')"><span class="dd-emoji">🍕</span>Western Snacks</div>
+            <div class="dd-item" onclick="filterCatAndCuisine('desserts','Western');scrollToSection('recipes')"><span class="dd-emoji">🍰</span>Western Desserts</div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <button class="nav-link">
+            Categories
+            <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+          </button>
+          <div class="dropdown">
+            <div class="dd-item" onclick="filterCat('all');scrollToSection('recipes')"><span class="dd-emoji">🍽️</span>All Dishes</div>
+            <div class="dd-item" onclick="filterCat('breakfast');scrollToSection('recipes')"><span class="dd-emoji">🌅</span>Breakfast</div>
+            <div class="dd-item" onclick="filterCat('lunch');scrollToSection('recipes')"><span class="dd-emoji">☀️</span>Lunch</div>
+            <div class="dd-item" onclick="filterCat('dinner');scrollToSection('recipes')"><span class="dd-emoji">🌙</span>Dinner</div>
+            <div class="dd-item" onclick="filterCat('snacks');scrollToSection('recipes')"><span class="dd-emoji">🎯</span>Snacks</div>
+            <div class="dd-item" onclick="filterCat('desserts');scrollToSection('recipes')"><span class="dd-emoji">🍮</span>Desserts</div>
+          </div>
+        </div>
+
+        <a href="#footer" class="nav-link">About</a>
+      </div>
+
+      <!-- Actions -->
+      <div class="nav-actions">
+        <button class="nav-search-btn" onclick="openSearch()" aria-label="Open search">
+          <span>🔍</span><span class="search-label">Search</span>
+        </button>
+        <button class="dark-btn" id="darkBtn" aria-label="Toggle dark mode">☀️</button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-badge">🌿 Indian &amp; World Cuisine</div>
+    <h1 class="hero-title">
+      Explore the<br/>
+      <span class="hero-gradient" id="typingText"></span><span class="typing-cur" aria-hidden="true">|</span>
+    </h1>
+    <p class="hero-sub">From Punjabi dhabas to Parisian bistros — discover 50+ authentic recipes spanning Indian and Western cuisines, crafted with love and tradition.</p>
+    <div class="hero-cta">
+      <a href="#recipes" class="btn-main">🍛 Explore Recipes</a>
+      <a href="#categories" class="btn-out">Browse Categories</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">52</div><div class="stat-l">Recipes</div></div>
+      <div class="stat-div"></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Cuisines</div></div>
+      <div class="stat-div"></div>
+      <div class="stat"><div class="stat-n">5</div><div class="stat-l">Categories</div></div>
+    </div>
+  </div>
+
+  <div class="hero-visual" aria-hidden="true">
+    <div class="hero-plate">
+      <div class="plate-ring pr1"></div>
+      <div class="plate-ring pr2"></div>
+      <div class="plate-ring pr3"></div>
+      <img class="plate-img" src="logo.jpeg" alt="Rasoi food"/>
+      <div class="fsp">🌶️</div>
+      <div class="fsp">🫚</div>
+      <div class="fsp">🧅</div>
+      <div class="fsp">🌿</div>
+      <div class="fsp">🧄</div>
+      <div class="fsp">🍋</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="cats-section" id="categories">
+  <div class="inner-wrap">
+    <div class="section-hdr reveal">
+      <div class="section-tag">Browse By</div>
+      <h2 class="section-title">Food Categories</h2>
+      <p class="section-sub">Filter by meal time, cuisine, or browse everything</p>
+    </div>
+    <div class="cats-scroll reveal" id="catsRow" role="group" aria-label="Filter recipes">
+      <button class="cat-pill active" data-cat="all" data-cuisine="all"><span>🍽️</span><span>All Dishes</span><span class="cnt">52</span></button>
+      <button class="cat-pill" data-cat="breakfast" data-cuisine="all"><span>🌅</span><span>Breakfast</span><span class="cnt">10</span></button>
+      <button class="cat-pill" data-cat="lunch" data-cuisine="all"><span>☀️</span><span>Lunch</span><span class="cnt">12</span></button>
+      <button class="cat-pill" data-cat="dinner" data-cuisine="all"><span>🌙</span><span>Dinner</span><span class="cnt">12</span></button>
+      <button class="cat-pill" data-cat="snacks" data-cuisine="all"><span>🎯</span><span>Snacks</span><span class="cnt">10</span></button>
+      <button class="cat-pill" data-cat="desserts" data-cuisine="all"><span>🍮</span><span>Desserts</span><span class="cnt">8</span></button>
+      <button class="cat-pill" data-cat="all" data-cuisine="Indian"><span>🇮🇳</span><span>Indian</span><span class="cnt">28</span></button>
+      <button class="cat-pill" data-cat="all" data-cuisine="Western"><span>🌍</span><span>Western</span><span class="cnt">12</span></button>
+      <button class="cat-pill" data-cat="all" data-cuisine="Italian"><span>🇮🇹</span><span>Italian</span><span class="cnt">6</span></button>
+      <button class="cat-pill" data-cat="all" data-cuisine="Mexican"><span>🇲🇽</span><span>Mexican</span><span class="cnt">6</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RECIPES ===== -->
+<section class="recipes-section" id="recipes">
+  <div class="inner-wrap">
+    <div class="section-hdr reveal" style="margin-bottom:40px">
+      <div class="section-tag">The Collection</div>
+      <h2 class="section-title">Featured Recipes</h2>
+      <p class="section-sub">Click any recipe to view full details, ingredients &amp; method</p>
+    </div>
+    <div class="recipes-grid" id="recipesGrid" role="list">
+      <div class="no-res" id="noRes" role="status">
+        <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:8px">No recipes found</h3>
+        <p style="color:var(--text3)">Try a different filter or search term</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-ov" id="modalOv" role="dialog" aria-modal="true" aria-label="Recipe details">
+  <div class="modal-box" id="modalBox">
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ===== EASTER EGG ===== -->
+<div class="easter" id="easterEgg" role="dialog" aria-label="Secret found">
+  <div class="easter-box">
+    <div style="font-size:3rem">🎉</div>
+    <h3>You found the secret!</h3>
+    <p>A true foodie explorer! 🍛✨</p>
+    <div class="spices">🌶️🧄🌿🫚🍋🥥</div>
+    <button class="easter-close" onclick="document.getElementById('easterEgg').classList.remove('show')">Close</button>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" id="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="ft-logo">
+        <img src="logo.jpeg" alt="Rasoi" onerror="this.style.display='none'"/>
+        <span class="ft-logo-t">Rasoi</span>
+      </div>
+      <p class="ft-tag">Bringing the warmth of Indian kitchens and world flavors to your screen — one recipe at a time.</p>
+      <div class="ft-socials">
+        <a class="ft-soc" href="#" aria-label="Facebook">📘</a>
+        <a class="ft-soc" href="#" aria-label="Instagram">📷</a>
+        <a class="ft-soc" href="#" aria-label="Twitter">🐦</a>
+        <a class="ft-soc" href="#" aria-label="YouTube">▶️</a>
+      </div>
+    </div>
+
+    <div class="ft-col">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="#" onclick="filterCat('breakfast');scrollToSection('recipes')">Breakfast</a></li>
+        <li><a href="#" onclick="filterCat('lunch');scrollToSection('recipes')">Lunch</a></li>
+        <li><a href="#" onclick="filterCat('dinner');scrollToSection('recipes')">Dinner</a></li>
+        <li><a href="#" onclick="filterCat('snacks');scrollToSection('recipes')">Snacks</a></li>
+        <li><a href="#" onclick="filterCat('desserts');scrollToSection('recipes')">Desserts</a></li>
+      </ul>
+    </div>
+
+    <div class="ft-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#home">About Rasoi</a></li>
+        <li><a href="#recipes">All Recipes</a></li>
+        <li><a href="#" onclick="openSearch()">Search</a></li>
+        <li><a href="#">Submit Recipe</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="ft-col">
+      <h4>Stay Updated</h4>
+      <p>Get new recipes in your inbox weekly.</p>
+      <div class="ft-sub">
+        <input type="email" placeholder="your@email.com" aria-label="Email for newsletter"/>
+        <button class="ft-sub-btn" aria-label="Subscribe">→</button>
+      </div>
+      <p class="ft-note">🌶️ Spicy recipes always included.</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Rasoi — Made with ❤️ &amp; lots of spices</p>
+    <p class="ft-hint">💡 Click the logo 5× for a surprise!</p>
+  </div>
+</footer>
+
+<script src="java.js"></script>
+</body>
+</html>
