@@ -358,3 +358,23 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);over
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--primary);color:#fff;padding:11px 22px;border-radius:99px;font-size:.85rem;font-weight:500;z-index:9999;opacity:0;transition:all .4s;white-space:nowrap;pointer-events:none;max-width:calc(100vw - 32px);text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.feedback-btn{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #822f15;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 999;
+    transition: 0.3s;
+}
+
+.feedback-btn:hover{
+    background: #e64a19;
+    transform: scale(1.05);
+}
