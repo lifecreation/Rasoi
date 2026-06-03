@@ -149,6 +149,7 @@ function renderRecipes() {
           aria-label="${isLiked ? 'Remove from' : 'Add to'} favourites">
           ${isLiked ? '❤️' : '🤍'}
         </button>
+        <div class="rcard-view">View Recipe <span>→</span></div>
       </div>
       <div class="rcard-body">
         <div class="rcard-meta">
@@ -158,6 +159,7 @@ function renderRecipes() {
         </div>
         <div class="rcard-title">${r.name}</div>
         <div class="rcard-desc">${r.desc}</div>
+        <div class="rcard-tags">${r.tags.slice(0, 3).map(t => `<span class="rcard-tag">${t}</span>`).join('')}</div>
         <div class="rcard-footer">
           <span class="rcard-diff">
             <span class="diff-dot" style="background:${getDiffDot(r.diff)}"></span>${r.diff}
@@ -168,23 +170,82 @@ function renderRecipes() {
 
     card.querySelector('.rcard-fav').addEventListener('click', e => {
       e.stopPropagation();
-      toggleLike(r.id);
+      toggleLike(r.id, e.currentTarget);
     });
     card.addEventListener('click', () => openModal(r));
+
+    // Mobile touch: ripple + shimmer
+    card.addEventListener('touchstart', function(e) {
+      const rect = this.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      const size = Math.max(rect.width, rect.height) * 0.6;
+
+      // Ripple
+      const ripple = document.createElement('div');
+      ripple.className = 'rcard-ripple';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x - size/2}px;top:${y - size/2}px`;
+      this.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+
+      // Shimmer
+      let shimmer = this.querySelector('.rcard-shimmer');
+      if (!shimmer) {
+        shimmer = document.createElement('div');
+        shimmer.className = 'rcard-shimmer';
+        this.appendChild(shimmer);
+      }
+      shimmer.classList.remove('shimmer-go');
+      void shimmer.offsetWidth;
+      shimmer.classList.add('shimmer-go');
+    }, { passive: true });
+
     grid.insertBefore(card, noRes);
   });
+
+  // Staggered card entrance via IntersectionObserver
+  observeCards();
 }
 
 // ===== TOGGLE LIKE =====
-function toggleLike(id) {
+function toggleLike(id, btnEl) {
   if (liked.has(id)) {
     liked.delete(id);
     showToast('Removed from favourites');
+    // Update just this button
+    if (btnEl) {
+      btnEl.classList.remove('liked');
+      btnEl.textContent = '🤍';
+      btnEl.setAttribute('aria-label', 'Add to favourites');
+    }
   } else {
     liked.add(id);
     showToast('Added to favourites ❤️');
+    if (btnEl) {
+      btnEl.classList.add('liked');
+      btnEl.textContent = '❤️';
+      btnEl.setAttribute('aria-label', 'Remove from favourites');
+
+      // Heart pop animation
+      btnEl.classList.remove('pop-anim');
+      void btnEl.offsetWidth;
+      btnEl.classList.add('pop-anim');
+      btnEl.addEventListener('animationend', () => btnEl.classList.remove('pop-anim'), { once: true });
+
+      // Floating emoji burst
+      const emojis = ['❤️', '🔥', '😍', '🍛'];
+      emojis.forEach((em, i) => {
+        const burst = document.createElement('div');
+        burst.className = 'fav-burst';
+        burst.textContent = em;
+        burst.style.cssText = `top:${btnEl.offsetTop}px;right:${12 + (i - 1.5) * 18}px`;
+        btnEl.closest('.rcard').appendChild(burst);
+        burst.addEventListener('animationend', () => burst.remove());
+      });
+    }
   }
-  renderRecipes();
+  // No full re-render needed — button updated inline
 }
 
 // ===== MODAL =====
@@ -391,6 +452,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1800);
   });
 });
+
+// ===== CARD SCROLL OBSERVER =====
+let cardObserver = null;
+function observeCards() {
+  if (cardObserver) cardObserver.disconnect();
+
+  cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        // Determine stagger index among siblings currently not visible
+        const allCards = Array.from(card.parentNode.querySelectorAll('.rcard:not(.card-visible)'));
+        const idx = allCards.indexOf(card);
+        const delay = Math.min(idx * 100, 400); // max 400ms stagger
+
+        setTimeout(() => {
+          card.classList.add('card-visible');
+
+          // Auto shimmer on first appear (mobile feel)
+          if ('ontouchstart' in window) {
+            setTimeout(() => {
+              let shimmer = card.querySelector('.rcard-shimmer');
+              if (!shimmer) {
+                shimmer = document.createElement('div');
+                shimmer.className = 'rcard-shimmer';
+                card.appendChild(shimmer);
+              }
+              shimmer.classList.remove('shimmer-go');
+              void shimmer.offsetWidth;
+              shimmer.classList.add('shimmer-go');
+            }, 300);
+          }
+        }, delay);
+
+        cardObserver.unobserve(card);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.rcard:not(.card-visible)').forEach(card => {
+    cardObserver.observe(card);
+  });
+}
 
 // Drawer
 function openDrawer() {
