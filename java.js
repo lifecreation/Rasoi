@@ -522,3 +522,7 @@ function closeDrawer() {
   document.getElementById('hamburger').classList.remove('open');
   document.getElementById('hamburger').setAttribute('aria-expanded', 'false');
 }
+window.addEventListener("load", () => {
+    document.querySelector(".skeleton-card").style.display = "none";
+    document.querySelector(".real-content").style.display = "block";
+});
