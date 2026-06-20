@@ -64,15 +64,7 @@ const RECIPES = [
   {id:51,name:'Aloo Tikki',cat:'snacks',cuisine:'Indian',time:'30 min',diff:'Easy',emoji:'🥔',img:'aloo taki.jpeg',tags:['Street Food','Crispy','North Indian'],desc:'Crispy potato patties spiced with cumin and amchur, pan-fried golden — Delhi\'s most beloved street snack.',ingredients:['4 boiled potatoes','Cumin seeds','Amchur','Green chili','Coriander','Breadcrumbs','Oil','Garam masala','Ginger'],steps:['Mash potatoes with all spices.','Shape into round patties.','Coat lightly with breadcrumbs.','Shallow fry in oil until golden both sides.','Serve with three chutneys and yogurt.'],video:'https://www.youtube.com/embed/2qq5fmo54SE?si=dZQ9JY1X1MXegPdl'},
   {id:52,name:'Medu Vada',cat:'snacks',cuisine:'Indian',time:'30 min',diff:'Medium',emoji:'🍩',img:'Medu Vada.jpeg',tags:['South Indian','Crispy','Protein'],desc:'Crispy ring-shaped fritters from urad dal batter — South India\'s favourite breakfast snack.',ingredients:['1 cup urad dal','Ginger','Green chilies','Curry leaves','Black pepper','Coconut pieces','Salt','Oil for frying'],steps:['Soak dal 4 hours, grind to thick smooth batter.','Add ginger, chilies, curry leaves and pepper.','Wet hands, shape into rings with hole in centre.','Deep fry in hot oil until golden and crispy.','Serve hot with sambar and coconut chutney.'],video:'https://www.youtube.com/embed/6MH76dIOgUQ?si=GWiB4kY9xB9oeIzc'}
 ];
-window.addEventListener("load", function () {
-    document.querySelectorAll(".skeleton").forEach(function (el) {
-        el.style.display = "none";
-    });
 
-    document.querySelectorAll(".real-content").forEach(function (el) {
-        el.style.display = "block";
-    });
-});
 // ===== STATE =====
 let activeCat = 'all';
 let activeCuisine = 'all';
